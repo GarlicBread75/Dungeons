@@ -34,6 +34,7 @@ public class HealthArmour : MonoBehaviour
     [SerializeField] Vector2 knockback;
     SpriteRenderer sr;
     Rigidbody2D rb;
+    Color originalColour;
 
     [Space]
 
@@ -51,6 +52,7 @@ public class HealthArmour : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        originalColour = sr.color;
 
         currentHp = maxHp;
         currentArmour = maxArmour;
@@ -197,7 +199,7 @@ public class HealthArmour : MonoBehaviour
             }
             yield return new WaitForSeconds(invulnerableDuration/numberOfFlashes);
         }
-        sr.color = Color.white;
+        sr.color = originalColour;
     }
 
     IEnumerator RegenArmour()

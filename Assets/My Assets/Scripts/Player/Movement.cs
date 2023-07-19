@@ -14,11 +14,12 @@ public class Movement : MonoBehaviour
     [SerializeField] float dashSpeed;
     [SerializeField] float dashDuration;
     [SerializeField] float dashCooldown;
-    [SerializeField] float cdAcceleration;
     TrailRenderer tr;
+
     [Space]
     [Space]
     [Space]
+
     [SerializeField] float dashCd;
     [SerializeField] bool dashPressed;
     [SerializeField] bool dashing;
@@ -36,7 +37,7 @@ public class Movement : MonoBehaviour
         moveX = Input.GetAxisRaw("Horizontal");
         moveY = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !dashing)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !dashing && (moveX !=0 || moveY != 0))
         {
             dashPressed = true;
         }
@@ -52,7 +53,7 @@ public class Movement : MonoBehaviour
 
         if (dashCd > 0)
         {
-            dashCd -= Time.fixedDeltaTime * cdAcceleration;
+            dashCd -= Time.fixedDeltaTime;
         }
         else
         {
@@ -68,13 +69,20 @@ public class Movement : MonoBehaviour
 
     IEnumerator Dashing()
     {
-        dashing = true;
+        dashCd = dashCooldown;
         canDash = false;
-        rb.velocity = new Vector2(moveX * dashSpeed, moveY * dashSpeed);
+        dashing = true;
+        if (moveX != 0 && moveY != 0)
+        {
+            rb.velocity = new Vector2(moveX * (0.9f * dashSpeed), moveY * (0.9f * dashSpeed));
+        }
+        else
+        {
+            rb.velocity = new Vector2(moveX * dashSpeed, moveY * dashSpeed);
+        }
         tr.emitting = true;
         yield return new WaitForSeconds(dashDuration);
-        tr.emitting = false;
         dashing = false;
-        dashCd = dashCooldown;
+        tr.emitting = false;
     }
 }
