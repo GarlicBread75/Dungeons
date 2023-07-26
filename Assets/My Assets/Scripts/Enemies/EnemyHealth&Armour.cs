@@ -6,7 +6,8 @@ public class EnemyHealthArmour : MonoBehaviour
     [Header("Health")]
     [SerializeField] int maxHp;
     [SerializeField] int currentHp;
-    [SerializeField] UnityEvent thingy;
+    [SerializeField] GameObject deathEffect;
+    [SerializeField] UnityEvent addKill;
 
     [Space]
 
@@ -106,7 +107,9 @@ public class EnemyHealthArmour : MonoBehaviour
 
     public void Die()
     {
-        thingy.Invoke();
+        GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(effect, 0.6f);
+        addKill.Invoke();
         Destroy(gameObject);
     }
 }

@@ -15,21 +15,15 @@ public class Movement : MonoBehaviour
     [SerializeField] float dashDuration;
     [SerializeField] float dashCooldown;
     TrailRenderer tr;
-
-    [Space]
-    [Space]
-    [Space]
-
-    [SerializeField] float dashCd;
-    [SerializeField] bool dashPressed;
-    [SerializeField] bool dashing;
-    [SerializeField] bool canDash;
+    float dashCd;
+    bool dashPressed;
+    bool dashing;
+    bool canDash;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         tr = GetComponent<TrailRenderer>();
-        dashCd = dashCooldown;
     }
 
     void Update()
@@ -74,7 +68,7 @@ public class Movement : MonoBehaviour
         dashing = true;
         if (moveX != 0 && moveY != 0)
         {
-            rb.velocity = new Vector2(moveX * (0.9f * dashSpeed), moveY * (0.9f * dashSpeed));
+            rb.velocity = new Vector2(moveX * (0.8f * dashSpeed), moveY * (0.8f * dashSpeed));
         }
         else
         {

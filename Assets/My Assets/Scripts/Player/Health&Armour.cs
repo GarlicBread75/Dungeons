@@ -11,6 +11,7 @@ public class HealthArmour : MonoBehaviour
     [SerializeField] int currentHp;
     [SerializeField] Slider hpSlider;
     [SerializeField] TextMeshProUGUI hpCount;
+    [SerializeField] GameObject deathEffect;
 
     [Space]
 
@@ -32,7 +33,7 @@ public class HealthArmour : MonoBehaviour
     [SerializeField] Color flashColor1;
     [SerializeField] Color flashColor2;
     [SerializeField] Vector2 knockback;
-    SpriteRenderer sr;
+    [SerializeField] SpriteRenderer sr;
     Rigidbody2D rb;
     Color originalColour;
 
@@ -51,7 +52,6 @@ public class HealthArmour : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
         originalColour = sr.color;
 
         currentHp = maxHp;
@@ -164,15 +164,17 @@ public class HealthArmour : MonoBehaviour
 
     void Die()
     {
+        GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
+        Destroy(effect, 1.1f);
         transform.position = temporaryPosition.position;
     }
 
     IEnumerator Respawn()
     {
         Die();
-        yield return new WaitForSeconds(respawnDelay);
         currentHp = maxHp;
         currentArmour = maxArmour;
+        yield return new WaitForSeconds(respawnDelay);
         transform.position = respawnPoint.position;
     }
 
@@ -187,6 +189,8 @@ public class HealthArmour : MonoBehaviour
 
     IEnumerator InvulnerabilityFlash()
     {
+        sr.color = Color.white;
+        yield return new WaitForSeconds(0.15f);
         for (int i = 0; i <= numberOfFlashes; i++)
         {
             if (i % 2 == 0)
